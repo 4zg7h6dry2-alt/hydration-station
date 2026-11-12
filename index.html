@@ -353,7 +353,14 @@ document.getElementById("greeting").textContent =
   hour < 18 ? "Good afternoon, Pedro! ♡" :
   "Good evening, Pedro! 🌙";
 
-update();
+update();const today = new Date().toDateString();
+const savedDate = localStorage.getItem("lastDate");
+
+if (savedDate !== today) {
+  total = 0;
+  localStorage.setItem("waterTotal", total);
+  localStorage.setItem("lastDate", today);
+}
 </script>
 
 </body>
