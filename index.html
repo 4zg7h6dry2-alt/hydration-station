@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#E6F2FD" />
+  <title>Hydration Station</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #E6F2FD;
+      --card-bg: #FFFFFF;
+      --primary-blue: #73AEDB;
+      --dark-blue: #245A8C;
+      --text-main: #1A2E40;
+      --text-muted: #5C7B96;
+      --accent-pink: #F4A8B8;
+      --border-color: #A7CBE8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border-radius: 0px !important;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+    }
+
+    .site-box {
+      width: 100%;
+      max-width: 440px;
+      background-color: var(--card-bg);
+      border: 2px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      min-height: 85vh;
+      box-shadow: 6px 6px 0px rgba(115, 174, 219, 0.25);
+    }
+
+    .top-bar {
+      background-color: var(--primary-blue);
+      color: #FFFFFF;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .brand-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .date-tag {
+      font-size: 0.85rem;
+      background: rgba(255, 255, 255, 0.25);
+      padding: 3px 8px;
+    }
+
+    .view {
+      display: none;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .view.active {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .greeting-box h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.55rem;
+      color: var(--dark-blue);
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .mascot-box {
+      background-color: #F2F8FD;
+      border: 1px solid var(--border-color);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .speech-box {
+      background-color: #FFFFFF;
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      width: 100%;
+      text-align: center;
+      color: var(--dark-blue);
+      font-weight: 500;
+    }
+
+    .mascot-frame {
+      width: 160px;
+      height: 160px;
+      background-color: #FFFFFF;
+      border: 2px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    .kelly-sprite {
+      width: 100%;
+      height: 100%;
+      background-image: url('kelly-sheet.png');
+      background-size: 300% 300%;
+      background-position: 0% 0%;
+      image-rendering: pixelated;
+    }
+
+    .progress-box {
+      background-color: #F8FBFE;
+      border: 1px solid var(--border-color);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .progress-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .glass-cup {
+      width: 44px;
+      height: 64px;
+      border: 2px solid var(--dark-blue);
+      background: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .glass-water {
+      width: 100%;
+      background-color: var(--primary-blue);
+      transition: height 0.3s ease;
+    }
+
+    .progress-numbers {
+      flex: 1;
+    }
+
+    .main-ml {
+      font-family: 'Fraunces', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--dark-blue);
+    }
+
+    .divider {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .sub-glasses {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .percent-box {
+      font-family: 'Fraunces', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary-blue);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: #E1EEFA;
+      border: 1px solid var(--border-color);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: var(--primary-blue);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .undo-link {
+      background: none;
+      border: none;
+      color: var(--dark-blue);
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-family: inherit;
+    }
+
+    .log-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .primary-btn {
+      background-color: var(--primary-blue);
+      color: #FFFFFF;
+      border: 2px solid var(--dark-blue);
+      padding: 14px;
+      font-family: 'Fraunces', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 3px 3px 0px var(--dark-blue);
+    }
+
+    .primary-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px var(--dark-blue);
+    }
+
+    .quick-panel {
+      display: none;
+      background-color: #F8FBFE;
+      border: 1px solid var(--border-color);
+      padding: 12px;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .quick-panel.open {
+      display: flex;
+    }
+
+    .panel-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .preset-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .preset-btn {
+      background-color: #FFFFFF;
+      border: 1px solid var(--border-color);
+      color: var(--dark-blue);
+      padding: 8px 4px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .preset-btn:hover {
+      background-color: #EAF3FB;
+    }
+
+    .custom-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .custom-row input {
+      flex: 1;
+      background-color: #FFFFFF;
+      border: 1px solid var(--border-color);
+      padding: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
+    .custom-btn {
+      background-color: var(--dark-blue);
+      color: #FFFFFF;
+      border: none;
+      padding: 0 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .content-box {
+      background-color: #F8FBFE;
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .content-box h2 {
+      font-family: 'Fraunces', serif;
+      color: var(--dark-blue);
+      font-size: 1.3rem;
+    }
+
+    .muted {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--dark-blue);
+    }
+
+    .field-group input {
+      background-color: #FFFFFF;
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+
+    .feedback-msg {
+      font-size: 0.85rem;
+      color: var(--dark-blue);
+      font-weight: 600;
+    }
+
+    .bottom-nav {
+      display: flex;
+      border-top: 2px solid var(--border-color);
+      background-color: #FFFFFF;
+    }
+
+    .nav-tab {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 12px 6px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: center;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .nav-tab:last-child {
+      border-right: none;
+    }
+
+    .nav-tab.active {
+      background-color: var(--accent-pink);
+      color: #1A2E40;
+    }
+  </style>
+</head>
+<body>
+  <div class="site-box">
+    <header class="top-bar">
+      <div class="brand-title">💧 Hydration Station</div>
+      <span class="date-tag" id="current-date">Today</span>
+    </header>
+
+    <!-- HOME -->
+    <main id="view-home" class="view active">
+      <section class="greeting-box">
+        <h1 id="greeting-text">Mooorning, Peju!</h1>
+        <p class="subtitle">Mini Kelly is watching your water intake.</p>
+      </section>
+
+      <section class="mascot-box">
+        <div class="speech-box" id="kelly-speech">
+          “Good morning, Cheesecake! Let’s stay hydrated today. ♡”
+        </div>
+        <div class="mascot-frame">
+          <div class="kelly-sprite" id="kelly-sprite-face"></div>
+        </div>
+      </section>
+
+      <section class="progress-box">
+        <div class="progress-top">
+          <div class="glass-cup">
+            <div class="glass-water" id="glass-water-fill" style="height: 0%;"></div>
+          </div>
+          <div class="progress-numbers">
+            <div class="main-ml">
+              <span id="consumed-ml">0</span> mL
+              <span class="divider">/ <span id="target-ml">2000</span> mL</span>
+            </div>
+            <div class="sub-glasses" id="glass-estimate">
+              ≈ 0.0 glasses (est. based on 250 mL/glass)
+            </div>
+          </div>
+          <div class="percent-box" id="percent-text">0%</div>
+        </div>
+
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-bar-fill" style="width: 0%;"></div>
+        </div>
+
+        <div class="progress-bottom">
+          <span id="remaining-text">2,000 mL remaining today</span>
+          <button type="button" class="undo-link" id="undo-btn">Undo last</button>
+        </div>
+      </section>
+
+      <section class="log-section">
+        <button type="button" class="primary-btn" id="open-log-btn">
+          💧 I DRANK WATER!
+        </button>
+
+        <div class="quick-panel" id="quick-add-panel">
+          <p class="panel-title">Select amount:</p>
+          <div class="preset-row">
+            <button type="button" class="preset-btn" data-ml="150">+150 mL</button>
+            <button type="button" class="preset-btn" data-ml="250">+250 mL</button>
+            <button type="button" class="preset-btn" data-ml="350">+350 mL</button>
+            <button type="button" class="preset-btn" data-ml="500">+500 mL</button>
+          </div>
+          <div class="custom-row">
+            <input type="number" id="custom-ml-input" placeholder="Custom mL (e.g. 400)" min="10" max="3000" />
+            <button type="button" class="custom-btn" id="add-custom-btn">Add</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- HISTORY -->
+    <main id="view-history" class="view">
+      <section class="content-box">
+        <h2>Hydration History</h2>
+        <p class="muted">Daily progress logs will appear here soon.</p>
+      </section>
+    </main>
+
+    <!-- DIARY -->
+    <main id="view-diary" class="view">
+      <section class="content-box">
+        <h2>Kelly's Diary</h2>
+        <p class="muted">Mini Kelly's personal notes on Peju's hydration habits will appear here soon.</p>
+      </section>
+    </main>
+
+    <!-- SETTINGS -->
+    <main id="view-settings" class="view">
+      <section class="content-box">
+        <h2>Hydration Settings</h2>
+        <p class="muted">Adjust your daily target and reference glass size.</p>
+
+        <div class="field-group">
+          <label for="setting-target">Daily Hydration Target (mL)</label>
+          <input type="number" id="setting-target" step="50" min="500" max="6000" />
+        </div>
+
+        <div class="field-group">
+          <label for="setting-glass">Reference Glass Size (mL)</label>
+          <input type="number" id="setting-glass" step="10" min="50" max="1000" />
+        </div>
+
+        <button type="button" class="primary-btn" id="save-settings-btn">Save Preferences</button>
+        <p class="feedback-msg" id="settings-feedback"></p>
+      </section>
+    </main>
+
+    <!-- TABS -->
+    <nav class="bottom-nav">
+      <button type="button" class="nav-tab active" data-target="view-home">Home</button>
+      <button type="button" class="nav-tab" data-target="view-history">History</button>
+      <button type="button" class="nav-tab" data-target="view-diary">Kelly's Diary</button>
+      <button type="button" class="nav-tab" data-target="view-settings">Settings</button>
+    </nav>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "hydration_station_peju_clean";
+
+    let state = {
+      date: new Date().toDateString(),
+      consumedMl: 0,
+      targetMl: 2000,
+      glassSizeMl: 250,
+      historyStack: []
+    };
+
+    const expressions = {
+      happy: { x: "0%", y: "0%", line: "Look at you! Being responsible. ♡" },
+      sideeye: { x: "50%", y: "0%", line: "Is that water I see, or are you just staring at me?" },
+      crying: { x: "100%", y: "0%", line: "You're making me cry... drink some water, Peju!" },
+      cheerful: { x: "0%", y: "50%", line: "Good job, Cheesecake! Keep that pace up!" },
+      wink: { x: "50%", y: "50%", line: "Smooth move. Another sip down!" },
+      annoyed: { x: "100%", y: "50%", line: "Water Police is watching you closely..." },
+      angry: { x: "0%", y: "100%", line: "Zero water?! Do I need to get strict with you?" },
+      sigh: { x: "50%", y: "100%", line: "I'm waiting... sip by sip, Cheesecake." },
+      loving: { x: "100%", y: "100%", line: "100% COMPLETE! Mini Kelly officially approves! ♡" }
+    };
+
+    function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          const today = new Date().toDateString();
+          if (parsed.date !== today) {
+            state.date = today;
+            state.consumedMl = 0;
+            state.historyStack = [];
+            state.targetMl = parsed.targetMl || 2000;
+            state.glassSizeMl = parsed.glassSizeMl || 250;
+            saveState();
+          } else {
+            state = { ...state, ...parsed };
+          }
+        }
+      } catch (e) {}
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {}
+    }
+
+    function updateGreeting() {
+      const now = new Date();
+      document.getElementById("current-date").textContent = now.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric"
+      });
+
+      const hr = now.getHours();
+      let msg = "Mooorning, Peju!";
+      if (hr >= 12 && hr < 17) msg = "Good afternoon, Cheesecake!";
+      else if (hr >= 17 && hr < 22) msg = "Evening, Peju! Winding down?";
+      else if (hr >= 22 || hr < 5) msg = "Still awake, Cheesecake?";
+      document.getElementById("greeting-text").textContent = msg;
+    }
+
+    function setExpression(key) {
+      const expr = expressions[key] || expressions.happy;
+      document.getElementById("kelly-sprite-face").style.backgroundPosition = `${expr.x} ${expr.y}`;
+      document.getElementById("kelly-speech").textContent = `“${expr.line}”`;
+    }
+
+    function renderUI(forcedKey) {
+      const { consumedMl, targetMl, glassSizeMl } = state;
+      const remaining = Math.max(0, targetMl - consumedMl);
+      const rawPct = Math.round((consumedMl / targetMl) * 100);
+      const barPct = Math.min(100, rawPct);
+      const glasses = (consumedMl / glassSizeMl).toFixed(1);
+
+      document.getElementById("consumed-ml").textContent = consumedMl.toLocaleString();
+      document.getElementById("target-ml").textContent = targetMl.toLocaleString();
+      document.getElementById("glass-estimate").textContent =
+        `≈ ${glasses} glasses (est. based on ${glassSizeMl} mL/glass)`;
+      document.getElementById("percent-text").textContent = `${rawPct}%`;
+
+      document.getElementById("progress-bar-fill").style.width = `${barPct}%`;
+      document.getElementById("glass-water-fill").style.height = `${barPct}%`;
+
+      document.getElementById("remaining-text").textContent =
+        consumedMl >= targetMl
+          ? "Daily hydration target reached! Great pace."
+          : `${remaining.toLocaleString()} mL remaining today`;
+
+      if (forcedKey) {
+        setExpression(forcedKey);
+      } else {
+        if (rawPct >= 100) setExpression("loving");
+        else if (rawPct >= 75) setExpression("cheerful");
+        else if (rawPct >= 50) setExpression("wink");
+        else if (rawPct >= 25) setExpression("happy");
+        else if (consumedMl > 0) setExpression("sideeye");
+        else setExpression("angry");
+      }
+
+      document.getElementById("setting-target").value = targetMl;
+      document.getElementById("setting-glass").value = glassSizeMl;
+    }
+
+    function logWater(ml) {
+      if (!ml || ml <= 0) return;
+      state.consumedMl += ml;
+      state.historyStack.push(ml);
+      saveState();
+      renderUI(state.consumedMl >= state.targetMl ? "loving" : "wink");
+    }
+
+    loadState();
+    updateGreeting();
+    renderUI();
+
+    document.getElementById("open-log-btn").addEventListener("click", function () {
+      document.getElementById("quick-add-panel").classList.toggle("open");
+    });
+
+    document.querySelectorAll(".preset-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        logWater(parseInt(this.getAttribute("data-ml"), 10));
+      });
+    });
+
+    document.getElementById("add-custom-btn").addEventListener("click", function () {
+      const input = document.getElementById("custom-ml-input");
+      const val = parseInt(input.value, 10);
+      if (val && val > 0) {
+        logWater(val);
+        input.value = "";
+      }
+    });
+
+    document.getElementById("undo-btn").addEventListener("click", function () {
+      if (state.historyStack.length === 0) return;
+      const last = state.historyStack.pop();
+      state.consumedMl = Math.max(0, state.consumedMl - last);
+      saveState();
+      renderUI("sigh");
+    });
+
+    document.getElementById("save-settings-btn").addEventListener("click", function () {
+      const newTarget = parseInt(document.getElementById("setting-target").value, 10);
+      const newGlass = parseInt(document.getElementById("setting-glass").value, 10);
+      if (newTarget >= 500 && newGlass >= 50) {
+        state.targetMl = newTarget;
+        state.glassSizeMl = newGlass;
+        saveState();
+        renderUI("happy");
+        const fb = document.getElementById("settings-feedback");
+        fb.textContent = "Saved!";
+        setTimeout(() => (fb.textContent = ""), 2000);
+      }
+    });
+
+    document.querySelectorAll(".nav-tab").forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        document.querySelectorAll(".nav-tab").forEach((t) => t.classList.remove("active"));
+        document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
+        this.classList.add("active");
+        document.getElementById(this.getAttribute("data-target")).classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>
