@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -129,7 +129,7 @@
       height: 100%;
       background-image: url('kelly-sheet.png');
       background-size: 300% 300%;
-      background-position: 0% 0%;
+      background-position: 50% 100%;
       image-rendering: pixelated;
     }
 
@@ -506,7 +506,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "hydration_station_pedro_v3";
+    const STORAGE_KEY = "hydration_station_pedro_v4";
 
     let state = {
       date: new Date().toDateString(),
@@ -516,15 +516,11 @@
       historyStack: []
     };
 
-    // 3x3 Grid Coordinates mapping to the new image layout:
-    // Row 1: [0%,0%] Blow Kiss Pink | [50%,0%] Huff Burgundy | [100%,0%] Sad Blue
-    // Row 2: [0%,50%] Cheerful Yellow | [50%,50%] Wink Pink | [100%,50%] Annoyed Black
-    // Row 3: [0%,100%] Storm Cloud (centered/left column slot)
     const expressions = {
-      storm: { x: "0%", y: "100%", line: "Zero water?! Do I need to get strict with you, Pedro?" },
+      storm: { x: "50%", y: "100%", line: "Zero water?! Do I need to get strict with you, Pedro?" },
       huff:  { x: "50%", y: "0%", line: "Hmph. You undone a sip? I'm watching you, Pedro." },
       sad:   { x: "100%", y: "0%", line: "You're making me sad... please don't undo your water progress!" },
-      yellow:{ x: "0%", y: "50%", line: "100% COMPLETE! Ausgezeichnet, Pedro! I approve! ♡" },
+      yellow:{ x: "0%", y: "50%", line: "100% COMPLETE! Ausgezeichnet, Pedro! Look at that gorgeous yellow energy! ♡" },
       pink1: { x: "0%", y: "0%", line: "Mwah! Thanks for the sip, Pedro. ♡" },
       pink2: { x: "50%", y: "50%", line: "Sehr gut gemacht, Pedro! What a good job! ✨" }
     };
@@ -588,7 +584,7 @@
       document.getElementById("target-ml").textContent = targetMl.toLocaleString();
       document.getElementById("glass-estimate").textContent =
         `≈ ${glasses} glasses (est. based on ${glassSizeMl} mL/glass)`;
-      document.getElementById("percent-text").textContent =`${rawPct}%`;
+      document.getElementById("percent-text").textContent = `${rawPct}%`;
 
       document.getElementById("progress-bar-fill").style.width = `${barPct}%`;
       document.getElementById("glass-water-fill").style.height = `${barPct}%`;
@@ -606,7 +602,6 @@
         } else if (rawPct >= 100) {
           setExpression("yellow");
         } else {
-          // Alternate between the two pinks as he drinks!
           const pinkChoice = (Math.floor(consumedMl / 250) % 2 === 0) ? "pink1" : "pink2";
           setExpression(pinkChoice);
         }
@@ -659,7 +654,6 @@
       state.consumedMl = Math.max(0, state.consumedMl - last);
       saveState();
       
-      // If he hasn't drank anything after undoing, show storm. Otherwise alternate between huff and sad!
       if (state.consumedMl === 0) {
         renderUI("storm");
       } else {
