@@ -398,7 +398,7 @@
     <!-- HOME -->
     <main id="view-home" class="view active">
       <section class="greeting-box">
-        <h1 id="greeting-text">Mooorning, Peju!</h1>
+        <h1 id="greeting-text">Moshi,Moshi, Pedro!</h1>
         <p class="subtitle">Mini Kelly is watching your water intake.</p>
       </section>
 
@@ -471,7 +471,7 @@
     <main id="view-diary" class="view">
       <section class="content-box">
         <h2>Kelly's Diary</h2>
-        <p class="muted">Mini Kelly's personal notes on Peju's hydration habits will appear here soon.</p>
+        <p class="muted">Mini Kelly's personal notes on pedro's hydration habits will appear here soon.</p>
       </section>
     </main>
 
@@ -563,9 +563,9 @@
       });
 
       const hr = now.getHours();
-      let msg = "Mooorning, Peju!";
+      let msg = "Mooorning, Pedro!";
       if (hr >= 12 && hr < 17) msg = "Good afternoon, Cheesecake!";
-      else if (hr >= 17 && hr < 22) msg = "Evening, Peju! Winding down?";
+      else if (hr >= 17 && hr < 22) msg = "Evening, Pedro! Winding down?";
       else if (hr >= 22 || hr < 5) msg = "Still awake, Cheesecake?";
       document.getElementById("greeting-text").textContent = msg;
     }
