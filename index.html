@@ -404,7 +404,7 @@
 
       <section class="mascot-box">
         <div class="speech-box" id="kelly-speech">
-          “Good morning, Pedro! Let’s stay hydrated today. ♡”
+          “Zero water?! Do I need to get strict with you, Pedro?”
         </div>
         <div class="mascot-frame">
           <div class="kelly-sprite" id="kelly-sprite-face"></div>
@@ -506,7 +506,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "hydration_station_pedro_clean";
+    const STORAGE_KEY = "hydration_station_pedro_v3";
 
     let state = {
       date: new Date().toDateString(),
@@ -516,16 +516,17 @@
       historyStack: []
     };
 
+    // 3x3 Grid Coordinates mapping to the new image layout:
+    // Row 1: [0%,0%] Blow Kiss Pink | [50%,0%] Huff Burgundy | [100%,0%] Sad Blue
+    // Row 2: [0%,50%] Cheerful Yellow | [50%,50%] Wink Pink | [100%,50%] Annoyed Black
+    // Row 3: [0%,100%] Storm Cloud (centered/left column slot)
     const expressions = {
-      happy: { x: "0%", y: "0%", line: "Look at you! Being responsible. ♡" },
-      sideeye: { x: "50%", y: "0%", line: "Is that water I see, or are you just staring at me?" },
-      crying: { x: "100%", y: "0%", line: "You're making me cry... drink some water, Pedro!" },
-      cheerful: { x: "0%", y: "50%", line: "Good job, Pedro! Keep that pace up!" },
-      wink: { x: "50%", y: "50%", line: "Smooth move. Another sip down!" },
-      annoyed: { x: "100%", y: "50%", line: "Water Police is watching you closely..." },
-      angry: { x: "0%", y: "100%", line: "Zero water?! Do I need to get strict with you?" },
-      sigh: { x: "50%", y: "100%", line: "I'm waiting... sip by sip, Pedro." },
-      loving: { x: "100%", y: "100%", line: "100% COMPLETE! Mini Kelly officially approves! ♡" }
+      storm: { x: "0%", y: "100%", line: "Zero water?! Do I need to get strict with you, Pedro?" },
+      huff:  { x: "50%", y: "0%", line: "Hmph. You undone a sip? I'm watching you, Pedro." },
+      sad:   { x: "100%", y: "0%", line: "You're making me sad... please don't undo your water progress!" },
+      yellow:{ x: "0%", y: "50%", line: "100% COMPLETE! Ausgezeichnet, Pedro! Look at that gorgeous yellow energy! ♡" },
+      pink1: { x: "0%", y: "0%", line: "Mwah! Thanks for the sip, Pedro. ♡" },
+      pink2: { x: "50%", y: "50%", line: "Sehr gut gemacht, Pedro! What a good job! ✨" }
     };
 
     function loadState() {
@@ -571,7 +572,7 @@
     }
 
     function setExpression(key) {
-      const expr = expressions[key] || expressions.happy;
+      const expr = expressions[key] || expressions.storm;
       document.getElementById("kelly-sprite-face").style.backgroundPosition = `${expr.x} ${expr.y}`;
       document.getElementById("kelly-speech").textContent = `“${expr.line}”`;
     }
@@ -587,25 +588,28 @@
       document.getElementById("target-ml").textContent = targetMl.toLocaleString();
       document.getElementById("glass-estimate").textContent =
         `≈ ${glasses} glasses (est. based on ${glassSizeMl} mL/glass)`;
-      document.getElementById("percent-text").textContent = `${rawPct}%`;
+      document.getElementById("percent-text").textContent =`${rawPct}%`;
 
       document.getElementById("progress-bar-fill").style.width = `${barPct}%`;
       document.getElementById("glass-water-fill").style.height = `${barPct}%`;
 
       document.getElementById("remaining-text").textContent =
         consumedMl >= targetMl
-          ? "Daily hydration target reached! Great pace."
+          ? "Daily hydration target reached! Ausgezeichnet!"
           : `${remaining.toLocaleString()} mL remaining today`;
 
       if (forcedKey) {
         setExpression(forcedKey);
       } else {
-        if (rawPct >= 100) setExpression("loving");
-        else if (rawPct >= 75) setExpression("cheerful");
-        else if (rawPct >= 50) setExpression("wink");
-        else if (rawPct >= 25) setExpression("happy");
-        else if (consumedMl > 0) setExpression("sideeye");
-        else setExpression("angry");
+        if (consumedMl <= 0) {
+          setExpression("storm");
+        } else if (rawPct >= 100) {
+          setExpression("yellow");
+        } else {
+          // Alternate between the two pinks as he drinks!
+          const pinkChoice = (Math.floor(consumedMl / 250) % 2 === 0) ? "pink1" : "pink2";
+          setExpression(pinkChoice);
+        }
       }
 
       document.getElementById("setting-target").value = targetMl;
@@ -617,7 +621,13 @@
       state.consumedMl += ml;
       state.historyStack.push(ml);
       saveState();
-      renderUI(state.consumedMl >= state.targetMl ? "loving" : "wink");
+      
+      if (state.consumedMl >= state.targetMl) {
+        renderUI("yellow");
+      } else {
+        const pinkChoice = (state.historyStack.length % 2 === 0) ? "pink1" : "pink2";
+        renderUI(pinkChoice);
+      }
     }
 
     loadState();
@@ -648,7 +658,14 @@
       const last = state.historyStack.pop();
       state.consumedMl = Math.max(0, state.consumedMl - last);
       saveState();
-      renderUI("sigh");
+      
+      // If he hasn't drank anything after undoing, show storm. Otherwise alternate between huff and sad!
+      if (state.consumedMl === 0) {
+        renderUI("storm");
+      } else {
+        const undoChoice = (state.historyStack.length % 2 === 0) ? "huff" : "sad";
+        renderUI(undoChoice);
+      }
     });
 
     document.getElementById("save-settings-btn").addEventListener("click", function () {
@@ -658,7 +675,7 @@
         state.targetMl = newTarget;
         state.glassSizeMl = newGlass;
         saveState();
-        renderUI("happy");
+        renderUI();
         const fb = document.getElementById("settings-feedback");
         fb.textContent = "Saved!";
         setTimeout(() => (fb.textContent = ""), 2000);
