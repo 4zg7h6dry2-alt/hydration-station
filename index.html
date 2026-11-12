@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#dceafa">
+<title>Hydration Station ♡</title>
+
+<style>
+:root {
+  --blue: #dceafa;
+  --cream: #fffaf2;
+  --pink: #f3cbd7;
+  --burgundy: #713e50;
+  --brown: #59443f;
+  --lavender: #e9e1f5;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--brown);
+  font-family: Georgia, serif;
+}
+
+.container {
+  max-width: 480px;
+  margin: auto;
+  padding: 22px;
+}
+
+header {
+  background: var(--blue);
+  padding: 22px;
+  border-radius: 24px;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  margin: 0;
+  color: var(--burgundy);
+  font-size: 27px;
+}
+
+header p { margin-bottom: 0; }
+
+.card {
+  background: white;
+  border-radius: 22px;
+  padding: 20px;
+  margin: 16px 0;
+  box-shadow: 0 4px 15px #59443f0c;
+}
+
+.mascot {
+  background: var(--pink);
+  border-radius: 22px;
+  padding: 22px;
+  text-align: center;
+}
+
+.character {
+  font-size: 76px;
+  margin: 5px;
+}
+
+.speech {
+  background: white;
+  padding: 14px;
+  border-radius: 16px;
+  font-size: 16px;
+}
+
+h2 {
+  color: var(--burgundy);
+  font-size: 21px;
+}
+
+.progress {
+  height: 14px;
+  background: #eee8e3;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 15px 0;
+}
+
+.bar {
+  height: 100%;
+  width: 0%;
+  background: #9dbbdc;
+  transition: width .3s;
+}
+
+.amount {
+  font-size: 34px;
+  font-weight: bold;
+  color: var(--burgundy);
+}
+
+button {
+  border: none;
+  padding: 13px 16px;
+  margin: 5px 3px;
+  border-radius: 14px;
+  background: var(--blue);
+  color: var(--brown);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+button:active { transform: scale(.97); }
+
+.primary {
+  width: 100%;
+  background: var(--burgundy);
+  color: white;
+  padding: 17px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  width: 100%;
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.small {
+  font-size: 13px;
+  opacity: .75;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--burgundy);
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <p id="date"></p>
+  <h1>Hydration Station ♡</h1>
+  <p id="greeting">Mooorning, My Cheesecake!</p>
+</header>
+
+<section class="mascot">
+  <div class="character">🎀</div>
+  <div class="speech" id="message">
+    Pedro, hydration is calling. ♡
+  </div>
+  <p class="small">Mini Kelly • Your personal water police</p>
+</section>
+
+<section class="card">
+  <h2>Today's hydration</h2>
+  <div class="amount"><span id="total">0</span> mL</div>
+  <p id="glasses">0 glasses</p>
+
+  <div class="progress">
+    <div class="bar" id="bar"></div>
+  </div>
+
+  <p id="remaining">Let's get hydrated!</p>
+  <p class="small" id="percentage">0% completed</p>
+</section>
+
+<section class="card">
+  <h2>Log your water 💧</h2>
+  <p>How much did you drink?</p>
+
+  <button onclick="addWater(150)">150 mL</button>
+  <button onclick="addWater(250)">250 mL</button>
+  <button onclick="addWater(350)">350 mL</button>
+  <button onclick="addWater(500)">500 mL</button>
+
+  <input type="number" id="custom" placeholder="Enter custom amount in mL">
+
+  <button class="primary" onclick="customWater()">
+    I DRANK WATER! ♡
+  </button>
+</section>
+
+<section class="card">
+  <h2>Your daily goal</h2>
+  <p>Choose your personal hydration target.</p>
+  <input type="number" id="goalInput" placeholder="Daily goal in mL">
+  <button onclick="changeGoal()">Update my goal</button>
+</section>
+
+<section class="card">
+  <h2>A little encouragement</h2>
+  <p id="diary">A new day, a fresh start. Let's do this! ♡</p>
+</section>
+
+<footer>
+  Made with love, a little mischief and lots of water. ♡
+</footer>
+
+</div>
+
+<script>
+let total = Number(localStorage.getItem("waterTotal")) || 0;
+let goal = Number(localStorage.getItem("waterGoal")) || 2000;
+let glassSize = 250;
+
+const messages = [
+  "Pedro, hydration is calling. ♡",
+  "Your internal organs would appreciate your cooperation.",
+  "I see that glass is still full.",
+  "A little water break, perhaps?",
+  "Excellent work, citizen.",
+  "Look at you! Being responsible. ❤️"
+];
+
+function update() {
+  document.getElementById("total").textContent = total;
+
+  let glasses = total / glassSize;
+  document.getElementById("glasses").textContent =
+    glasses.toFixed(1) + " approximate glasses";
+
+  let percentage = Math.min((total / goal) * 100, 100);
+
+  document.getElementById("bar").style.width =
+    percentage + "%";
+
+  document.getElementById("percentage").textContent =
+    Math.round(percentage) + "% completed";
+
+  let remaining = Math.max(goal - total, 0);
+
+  document.getElementById("remaining").textContent =
+    remaining > 0
+      ? remaining + " mL remaining"
+      : "Daily goal reached! Mini Kelly approves! ❤️";
+
+  localStorage.setItem("waterTotal", total);
+
+  document.getElementById("diary").textContent =
+    remaining === 0
+      ? "Well, look at you! I'm proud of you. ❤️"
+      : "Every little sip counts. Keep going!";
+}
+
+function addWater(amount) {
+  if (amount <= 0) return;
+
+  total += amount;
+
+  let message = messages[
+    Math.floor(Math.random() * messages.length)
+  ];
+
+  document.getElementById("message").textContent = message;
+
+  update();
+}
+
+function customWater() {
+  let amount = Number(document.getElementById("custom").value);
+
+  if (!amount || amount <= 0) {
+    alert("Please enter a valid amount.");
+    return;
+  }
+
+  addWater(amount);
+  document.getElementById("custom").value = "";
+}
+
+function changeGoal() {
+  let newGoal = Number(document.getElementById("goalInput").value);
+
+  if (!newGoal || newGoal <= 0) {
+    alert("Please enter a valid daily goal.");
+    return;
+  }
+
+  goal = newGoal;
+  localStorage.setItem("waterGoal", goal);
+  update();
+  document.getElementById("goalInput").value = "";
+}
+
+document.getElementById("date").textContent =
+  new Date().toDateString();
+
+let hour = new Date().getHours();
+
+document.getElementById("greeting").textContent =
+  hour < 12 ? "Mooorning, Pedro! ☀️" :
+  hour < 18 ? "Good afternoon, Pedro! ♡" :
+  "Good evening, Pedro! 🌙";
+
+update();
+</script>
+
+</body>
+</html>
