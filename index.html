@@ -398,13 +398,13 @@
     <!-- HOME -->
     <main id="view-home" class="view active">
       <section class="greeting-box">
-        <h1 id="greeting-text">Moshi,Moshi, Pedro!</h1>
+        <h1 id="greeting-text">Mooorning, Pedro!</h1>
         <p class="subtitle">Mini Kelly is watching your water intake.</p>
       </section>
 
       <section class="mascot-box">
         <div class="speech-box" id="kelly-speech">
-          “Good morning, Cheesecake! Let’s stay hydrated today. ♡”
+          “Good morning, Pedro! Let’s stay hydrated today. ♡”
         </div>
         <div class="mascot-frame">
           <div class="kelly-sprite" id="kelly-sprite-face"></div>
@@ -471,7 +471,7 @@
     <main id="view-diary" class="view">
       <section class="content-box">
         <h2>Kelly's Diary</h2>
-        <p class="muted">Mini Kelly's personal notes on pedro's hydration habits will appear here soon.</p>
+        <p class="muted">Mini Kelly's personal notes on Pedro's hydration habits will appear here soon.</p>
       </section>
     </main>
 
@@ -506,7 +506,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "hydration_station_peju_clean";
+    const STORAGE_KEY = "hydration_station_pedro_clean";
 
     let state = {
       date: new Date().toDateString(),
@@ -520,11 +520,11 @@
       happy: { x: "0%", y: "0%", line: "Look at you! Being responsible. ♡" },
       sideeye: { x: "50%", y: "0%", line: "Is that water I see, or are you just staring at me?" },
       crying: { x: "100%", y: "0%", line: "You're making me cry... drink some water, Pedro!" },
-      cheerful: { x: "0%", y: "50%", line: "Good job, Cheesecake! Keep that pace up!" },
+      cheerful: { x: "0%", y: "50%", line: "Good job, Pedro! Keep that pace up!" },
       wink: { x: "50%", y: "50%", line: "Smooth move. Another sip down!" },
       annoyed: { x: "100%", y: "50%", line: "Water Police is watching you closely..." },
       angry: { x: "0%", y: "100%", line: "Zero water?! Do I need to get strict with you?" },
-      sigh: { x: "50%", y: "100%", line: "I'm waiting... sip by sip, Cheesecake." },
+      sigh: { x: "50%", y: "100%", line: "I'm waiting... sip by sip, Pedro." },
       loving: { x: "100%", y: "100%", line: "100% COMPLETE! Mini Kelly officially approves! ♡" }
     };
 
@@ -564,9 +564,9 @@
 
       const hr = now.getHours();
       let msg = "Mooorning, Pedro!";
-      if (hr >= 12 && hr < 17) msg = "Good afternoon, Cheesecake!";
+      if (hr >= 12 && hr < 17) msg = "Good afternoon, Pedro!";
       else if (hr >= 17 && hr < 22) msg = "Evening, Pedro! Winding down?";
-      else if (hr >= 22 || hr < 5) msg = "Still awake, Cheesecake?";
+      else if (hr >= 22 || hr < 5) msg = "Still awake, Pedro?";
       document.getElementById("greeting-text").textContent = msg;
     }
 
