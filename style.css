@@ -1,1 +1,454 @@
+:root {
+  --powder-blue: #B8D4E3;
+  --powder-blue-dark: #8FB6CC;
+  --soft-cream: #FAF6F0;
+  --card-white: #FFFDF9;
+  --blush-pink: #F2D0D9;
+  --burgundy: #7A203A;
+  --chocolate: #3E2723;
+  --chocolate-soft: #6D544E;
+  --lavender: #DCD3EA;
+  --border-soft: #E8DFD5;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--powder-blue);
+  color: var(--chocolate);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: 440px;
+  background-color: var(--soft-cream);
+  border-radius: 28px;
+  border: 2px solid var(--border-soft);
+  box-shadow: 0 12px 32px rgba(62, 39, 35, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  min-height: calc(100vh - 32px);
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px 12px;
+  border-bottom: 1px dashed var(--border-soft);
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--burgundy);
+  letter-spacing: -0.01em;
+}
+
+.date-pill {
+  background-color: var(--lavender);
+  color: var(--chocolate);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 5px 11px;
+  border-radius: 999px;
+}
+
+/* Views */
+.view {
+  display: none;
+  padding: 18px 20px;
+  flex: 1;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.view.active {
+  display: flex;
+}
+
+/* Greeting */
+.greeting-card h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.65rem;
+  color: var(--chocolate);
+  line-height: 1.2;
+}
+
+.greeting-card .subtitle {
+  font-size: 0.88rem;
+  color: var(--chocolate-soft);
+  margin-top: 4px;
+}
+
+/* Mini Kelly Stage */
+.mascot-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--card-white);
+  border: 1.5px solid var(--border-soft);
+  border-radius: 22px;
+  padding: 16px;
+  position: relative;
+}
+
+.speech-bubble {
+  background-color: var(--blush-pink);
+  color: var(--chocolate);
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  position: relative;
+  margin-bottom: 10px;
+  width: 100%;
+  transition: transform 0.2s ease;
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px 8px 0;
+  border-style: solid;
+  border-color: var(--blush-pink) transparent transparent;
+}
+
+.mascot-avatar-wrap {
+  width: 165px;
+  height: 165px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mascot-avatar-wrap.bounce {
+  transform: scale(1.06);
+}
+
+.kelly-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Hydration Progress Card */
+.progress-card {
+  background: var(--card-white);
+  border: 1.5px solid var(--border-soft);
+  border-radius: 22px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.progress-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Illustrated Water Glass */
+.glass-cup {
+  width: 34px;
+  height: 46px;
+  border: 2.5px solid var(--chocolate);
+  border-top: none;
+  border-radius: 3px 3px 9px 9px;
+  position: relative;
+  overflow: hidden;
+  background: #F4F9FC;
+  flex-shrink: 0;
+}
+
+.glass-water {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(180deg, #9ECAE1 0%, #6BAED6 100%);
+  transition: height 0.4s ease;
+}
+
+.progress-stats {
+  flex: 1;
+}
+
+.stat-main {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--chocolate);
+}
+
+.stat-main .unit {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.stat-main .target-divider {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--chocolate-soft);
+}
+
+.stat-sub {
+  font-size: 0.78rem;
+  color: var(--chocolate-soft);
+  margin-top: 2px;
+}
+
+.percent-badge {
+  background: var(--powder-blue);
+  color: var(--chocolate);
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 6px 10px;
+  border-radius: 12px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 14px;
+  background-color: #EFE9E1;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--powder-blue-dark), var(--burgundy));
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.progress-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--chocolate-soft);
+}
+
+.text-link-btn {
+  background: none;
+  border: none;
+  color: var(--burgundy);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Primary Button & Quick Add */
+.action-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.primary-drink-btn {
+  width: 100%;
+  background-color: var(--burgundy);
+  color: var(--soft-cream);
+  border: none;
+  border-radius: 18px;
+  padding: 16px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(122, 32, 58, 0.22);
+  transition: transform 0.12s ease, background-color 0.2s ease;
+}
+
+.primary-drink-btn:active {
+  transform: scale(0.98);
+}
+
+.quick-add-panel {
+  display: none;
+  background: var(--card-white);
+  border: 1.5px solid var(--border-soft);
+  border-radius: 18px;
+  padding: 14px;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quick-add-panel.open {
+  display: flex;
+}
+
+.panel-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--chocolate-soft);
+}
+
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.preset-btn {
+  background: var(--powder-blue);
+  color: var(--chocolate);
+  border: none;
+  border-radius: 12px;
+  padding: 10px 4px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.preset-btn:hover {
+  background: var(--powder-blue-dark);
+}
+
+.custom-row {
+  display: flex;
+  gap: 8px;
+}
+
+.custom-row input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border-soft);
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  color: var(--chocolate);
+  background: var(--soft-cream);
+}
+
+.custom-add-btn {
+  background: var(--chocolate);
+  color: var(--soft-cream);
+  border: none;
+  border-radius: 12px;
+  padding: 0 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Settings & Secondary Views */
+.card-box {
+  background: var(--card-white);
+  border: 1.5px solid var(--border-soft);
+  border-radius: 22px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card-box h2 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.3rem;
+  color: var(--burgundy);
+}
+
+.muted-text {
+  font-size: 0.88rem;
+  color: var(--chocolate-soft);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.form-group input {
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border-soft);
+  background: var(--soft-cream);
+  font-size: 0.95rem;
+  color: var(--chocolate);
+}
+
+.form-group small {
+  font-size: 0.76rem;
+  color: var(--chocolate-soft);
+}
+
+.save-btn {
+  background: var(--burgundy);
+  color: var(--soft-cream);
+  border: none;
+  border-radius: 14px;
+  padding: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.save-feedback {
+  font-size: 0.84rem;
+  color: var(--burgundy);
+  font-weight: 600;
+  min-height: 18px;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--card-white);
+  border-top: 1.5px solid var(--border-soft);
+  padding: 8px 6px;
+}
+
+.nav-item {
+  background: none;
+  border: none;
+  padding: 10px 4px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--chocolate-soft);
+  cursor: pointer;
+  border-radius: 12px;
+  transition: all 0.15s ease;
+}
+
+.nav-item.active {
+  background: var(--blush-pink);
+  color: var(--burgundy);
+}
 
