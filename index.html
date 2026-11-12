@@ -139,8 +139,7 @@ footer {
   text-align: center;
   padding: 20px;
   color: var(--burgundy);
-} 
-/* DESKTOP LAYOUT */
+}/* DESKTOP LAYOUT */
 
 @media (min-width: 800px) {
 
@@ -193,6 +192,7 @@ footer {
   footer {
     grid-column: 1 / -1;
   }
+}
 </style>
 </head>
 
@@ -267,8 +267,7 @@ let glassSize = 250;
 
 const messages = [
   "Pedro, hydration is calling. ♡",
-  "Your internal organs would appreciate your cooperation.",
-  "I see that glass is still full.",
+  "Your internal organs would appreciate your cooperation."
   "A little water break, perhaps?",
   "Excellent work, citizen.",
   "Look at you! Being responsible. ❤️"
@@ -294,7 +293,7 @@ function update() {
   document.getElementById("remaining").textContent =
     remaining > 0
       ? remaining + " mL remaining"
-      : "Daily goal reached! Mini Kelly approves! ❤️";
+      : "Daily goal reached! Mini Aury approves! ❤️";
 
   localStorage.setItem("waterTotal", total);
 
