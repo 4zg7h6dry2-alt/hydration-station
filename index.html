@@ -10,10 +10,10 @@
   <link rel="icon" type="image/png" href="kelly-sheet.png">
   <link rel="apple-touch-icon" href="kelly-sheet.png">
 
-  <!-- Baby Blue Link Preview Card -->
+  <!-- Link Preview Card -->
   <meta property="og:title" content="🐳🩵 Hydration Station">
   <meta property="og:description" content="Mini Kelly is watching your water intake! ♡">
-  <meta property="og:image" content="https://4zg7h6dry2-alt.github.io/hydration-station/preview.png">
+  <meta property="og:image" content="https://4zg7h6dry2-alt.github.io/hydration-station/preview.jpg">
   <meta property="og:url" content="https://4zg7h6dry2-alt.github.io/hydration-station/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
@@ -49,6 +49,61 @@
       justify-content: center;
       align-items: center;
       padding: 12px;
+      overflow: hidden;
+    }
+
+    /* SPLASH SCREEN STYLES */
+    #splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: url('preview.jpg');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding-bottom: 60px;
+      z-index: 9999;
+      transition: opacity 0.8s ease-in-out;
+    }
+
+    .splash-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(26, 46, 64, 0.25);
+      z-index: 1;
+    }
+
+    .splash-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      background: rgba(230, 242, 253, 0.85);
+      border: 2px solid var(--border-color);
+      padding: 18px 24px;
+      box-shadow: 4px 4px 0px rgba(36, 90, 140, 0.4);
+      max-width: 85%;
+    }
+
+    .splash-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--dark-blue);
+      margin-bottom: 4px;
+    }
+
+    .splash-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 500;
     }
 
     .site-box {
@@ -402,6 +457,16 @@
   </style>
 </head>
 <body>
+
+  <!-- SPLASH ANIMATION SCREEN -->
+  <div id="splash-screen">
+    <div class="splash-overlay"></div>
+    <div class="splash-content">
+      <div class="splash-title">🐳🩵 Hydration Station</div>
+      <div class="splash-subtitle">For Pedro ♡</div>
+    </div>
+  </div>
+
   <div class="site-box">
     <header class="top-bar">
       <div class="brand-title">🐳🩵 Hydration Station</div>
@@ -519,6 +584,17 @@
   </div>
 
   <script>
+    // Splash Screen Fade Out Handler
+    window.addEventListener("load", function () {
+      setTimeout(function () {
+        const splash = document.getElementById("splash-screen");
+        if (splash) {
+          splash.style.opacity = "0";
+          setTimeout(() => splash.remove(), 800);
+        }
+      }, 2000);
+    });
+
     const STORAGE_KEY = "hydration_station_pedro_v6";
 
     let state = {
