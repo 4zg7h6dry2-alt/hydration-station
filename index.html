@@ -5,6 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#E6F2FD" />
   <title>Hydration Station</title>
+
+  <!-- Browser Tab Icon -->
+  <link rel="icon" type="image/png" href="kelly-sheet.png">
+  <link rel="apple-touch-icon" href="kelly-sheet.png">
+
+  <!-- Baby Blue Link Preview Card -->
+  <meta property="og:title" content="🐳🩵 Hydration Station">
+  <meta property="og:description" content="Mini Kelly is watching your water intake! ♡">
+  <meta property="og:image" content="https://4zg7h6dry2-alt.github.io/hydration-station/preview.png">
+  <meta property="og:url" content="https://4zg7h6dry2-alt.github.io/hydration-station/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -516,19 +529,15 @@
       historyStack: []
     };
 
-    // All 7 expressions mapped to your exact new image grid[span_8](start_span)[span_8](end_span):
     const expressions = {
-      storm:   { x: "50%",  y: "100%", line: "Zero water?! Do I need to get strict with you, Pedro?" }, // Row 3 Center (Storm cloud)
-      annoyed: { x: "100%", y: "50%",  line: "Is that all? Keep going, Pedro." },                    // Row 2 Right (Black sweater steam)
-      kiss:    { x: "0%",   y: "0%",   line: "Mwah! Thanks for the sip, Luv. ♡" },                  // Row 1 Left (Pink blowing kiss)
-      wink:    { x: "50%",  y: "50%",  line: "Sehr gut gemacht, Pedro! What a good job! ✨" },        // Row 2 Center (Pink wink)
-      yellow:  { x: "0%",   y: "50%",  line: "100% COMPLETE! Ausgezeichnet, Pedro! I approve! ♡" }, // Row 1 Left (Yellow fists) -> wait, Yellow is Row 2 Col 1: x: 0%, y: 50%
-      huff:    { x: "50%",  y: "0%",   line: "Hmph. You undone a sip? I'm watching you, Pedro." },    // Row 1 Center (Burgundy huff)
-      sad:     { x: "100%", y: "0%",   line: "You're making me sad... please don't undo your water progress!" } // Row 1 Right (Blue crying)
+      storm:   { x: "50%",  y: "100%", line: "Zero water?! Do I need to get strict with you, Pedro?" },
+      annoyed: { x: "100%", y: "50%",  line: "Is that all? Keep going, Pedro." },
+      kiss:    { x: "0%",   y: "0%",   line: "Mwah! Thanks for the sip, Luv. ♡" },
+      wink:    { x: "50%",  y: "50%",  line: "Sehr gut gemacht, Pedro! What a good job! ✨" },
+      yellow:  { x: "0%",   y: "50%",  line: "100% COMPLETE! Ausgezeichnet, Pedro! I approve! ♡" },
+      huff:    { x: "50%",  y: "0%",   line: "Hmph. You undone a sip? I'm watching you, Pedro." },
+      sad:     { x: "100%", y: "0%",   line: "You're making me sad... please don't undo your water progress!" }
     };
-
-    // Correcting yellow coordinate mapping to Row 2 Col 1 (0% x, 50% y) -> wait, Row 2 Col 1 is x:0%, y:50%. Let's adjust keys cleanly:
-    expressions.yellow = { x: "0%", y: "50%", line: "100% COMPLETE! Ausgezeichnet, Pedro! I approve! ♡" };
 
     function loadState() {
       try {
@@ -607,7 +616,6 @@
         } else if (rawPct >= 100) {
           setExpression("yellow");
         } else {
-          // Cycle through annoyed, kiss, and wink as he drinks!
           const stageChoices = ["annoyed", "kiss", "wink"];
           const choiceIndex = Math.floor(consumedMl / 300) % stageChoices.length;
           setExpression(stageChoices[choiceIndex]);
@@ -636,7 +644,6 @@
     loadState();
     updateGreeting();
     
-    // Force expression check immediately on start
     if (state.consumedMl <= 0) {
       renderUI("storm");
     } else {
@@ -671,7 +678,6 @@
       if (state.consumedMl === 0) {
         renderUI("storm");
       } else {
-        // Alternate between huff and sad on undo
         const undoChoice = (state.historyStack.length % 2 === 0) ? "huff" : "sad";
         renderUI(undoChoice);
       }
