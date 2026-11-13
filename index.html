@@ -17,7 +17,6 @@
       --text-main: #1A2E40;
       --text-muted: #5C7B96;
       --accent-pink: #F4A8B8;
-      --accent-coral: #FF8DA1;
       --border-color: #A7CBE8;
     }
 
@@ -37,7 +36,6 @@
       justify-content: center;
       align-items: center;
       padding: 12px;
-      overflow-x: hidden;
     }
 
     .site-box {
@@ -49,8 +47,6 @@
       flex-direction: column;
       min-height: 85vh;
       box-shadow: 6px 6px 0px rgba(115, 174, 219, 0.25);
-      position: relative;
-      overflow: hidden;
     }
 
     .top-bar {
@@ -67,9 +63,6 @@
       font-family: 'Fraunces', serif;
       font-weight: 600;
       font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
     .date-tag {
@@ -100,9 +93,6 @@
     .subtitle {
       font-size: 0.9rem;
       color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
     .mascot-box {
@@ -113,7 +103,6 @@
       flex-direction: column;
       gap: 12px;
       align-items: center;
-      position: relative;
     }
 
     .speech-box {
@@ -142,58 +131,6 @@
       background-size: 300% 300%;
       background-position: 50% 100%;
       image-rendering: pixelated;
-    }
-
-    /* Pixel Art Custom Symbols (Lips & Cake) */
-    .pixel-lip {
-      display: inline-block;
-      width: 12px;
-      height: 8px;
-      background: var(--accent-coral);
-      position: relative;
-      box-shadow: 2px 0 0 var(--dark-blue), -2px 0 0 var(--dark-blue), 0 2px 0 var(--dark-blue);
-      image-rendering: pixelated;
-      margin: 0 2px;
-    }
-
-    .pixel-cake {
-      display: inline-block;
-      width: 12px;
-      height: 10px;
-      background: #FFF;
-      position: relative;
-      border: 1px solid var(--dark-blue);
-      image-rendering: pixelated;
-      margin: 0 2px;
-    }
-    .pixel-cake::before {
-      content: '';
-      position: absolute;
-      top: -3px;
-      left: 4px;
-      width: 2px;
-      height: 3px;
-      background: var(--accent-coral);
-    }
-
-    /* Roaming Pixel Cat */
-    .pixel-cat {
-      position: absolute;
-      bottom: 6px;
-      left: -24px;
-      font-size: 1.2rem;
-      animation: catWalk 14s linear infinite;
-      z-index: 10;
-      pointer-events: none;
-      image-rendering: pixelated;
-    }
-
-    @keyframes catWalk {
-      0% { left: -24px; transform: scaleX(1); }
-      48% { left: calc(100% - 30px); transform: scaleX(1); }
-      50% { left: calc(100% - 30px); transform: scaleX(-1); }
-      98% { left: -24px; transform: scaleX(-1); }
-      100% { left: -24px; transform: scaleX(1); }
     }
 
     .progress-box {
@@ -306,10 +243,6 @@
       cursor: pointer;
       text-align: center;
       box-shadow: 3px 3px 0px var(--dark-blue);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
     }
 
     .primary-btn:active {
@@ -334,9 +267,6 @@
       font-size: 0.85rem;
       color: var(--text-muted);
       font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
     .preset-row {
@@ -460,13 +390,8 @@
 </head>
 <body>
   <div class="site-box">
-    <!-- Roaming Pixel Cat -->
-    <div class="pixel-cat">🐈‍⬛</div>
-
     <header class="top-bar">
-      <div class="brand-title">
-        <span>💧</span> Hydration Station <span class="pixel-cake"></span>
-      </div>
+      <div class="brand-title">💧 Hydration Station</div>
       <span class="date-tag" id="current-date">Today</span>
     </header>
 
@@ -474,9 +399,7 @@
     <main id="view-home" class="view active">
       <section class="greeting-box">
         <h1 id="greeting-text">Mooorning, Pedro!</h1>
-        <p class="subtitle">
-          <span class="pixel-lip"></span> Mini Kelly is watching your water intake.
-        </p>
+        <p class="subtitle">Mini Kelly is watching your water intake.</p>
       </section>
 
       <section class="mascot-box">
@@ -517,13 +440,11 @@
 
       <section class="log-section">
         <button type="button" class="primary-btn" id="open-log-btn">
-          <span class="pixel-lip"></span> I DRANK WATER! <span class="pixel-cake"></span>
+          💧 I DRANK WATER!
         </button>
 
         <div class="quick-panel" id="quick-add-panel">
-          <p class="panel-title">
-            <span>✨</span> Select amount for Pedro:
-          </p>
+          <p class="panel-title">Select amount:</p>
           <div class="preset-row">
             <button type="button" class="preset-btn" data-ml="150">+150 mL</button>
             <button type="button" class="preset-btn" data-ml="250">+250 mL</button>
@@ -541,7 +462,7 @@
     <!-- HISTORY -->
     <main id="view-history" class="view">
       <section class="content-box">
-        <h2>Hydration History <span class="pixel-cake"></span></h2>
+        <h2>Hydration History</h2>
         <p class="muted">Daily progress logs will appear here soon.</p>
       </section>
     </main>
@@ -549,7 +470,7 @@
     <!-- DIARY -->
     <main id="view-diary" class="view">
       <section class="content-box">
-        <h2>Kelly's Diary <span class="pixel-lip"></span></h2>
+        <h2>Kelly's Diary</h2>
         <p class="muted">Mini Kelly's personal notes on Pedro's hydration habits will appear here soon.</p>
       </section>
     </main>
@@ -557,7 +478,7 @@
     <!-- SETTINGS -->
     <main id="view-settings" class="view">
       <section class="content-box">
-        <h2>Hydration Settings ✨</h2>
+        <h2>Hydration Settings</h2>
         <p class="muted">Adjust your daily target and reference glass size.</p>
 
         <div class="field-group">
@@ -585,7 +506,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "hydration_station_pedro_v8";
+    const STORAGE_KEY = "hydration_station_pedro_v6";
 
     let state = {
       date: new Date().toDateString(),
@@ -595,15 +516,19 @@
       historyStack: []
     };
 
+    // All 7 expressions mapped to your exact new image grid[span_8](start_span)[span_8](end_span):
     const expressions = {
-      storm:   { x: "50%",  y: "100%", line: "Zero water?! Do I need to get strict with you, Pedro? 🌩️" },
-      annoyed: { x: "100%", y: "50%",  line: "Is that all? Keep going, Pedro. 💨" },
-      kiss:    { x: "0%",   y: "0%",   line: "Mwah! Thanks for the sip, Luv. ♡" },
-      wink:    { x: "50%",  y: "50%",  line: "Sehr gut gemacht, Pedro! What a good job! ✨" },
-      yellow:  { x: "0%",   y: "50%",  line: "100% COMPLETE! Ausgezeichnet, Pedro! I Approve! ♡✨" },
-      huff:    { x: "50%",  y: "0%",   line: "Hmph. You undone a sip? I'm watching you, Pedro." },
-      sad:     { x: "100%", y: "0%",   line: "You're making me sad... please don't undo your water progress!" }
+      storm:   { x: "50%",  y: "100%", line: "Zero water?! Do I need to get strict with you, Pedro?" }, // Row 3 Center (Storm cloud)
+      annoyed: { x: "100%", y: "50%",  line: "Is that all? Keep going, Pedro." },                    // Row 2 Right (Black sweater steam)
+      kiss:    { x: "0%",   y: "0%",   line: "Mwah! Thanks for the sip, Luv. ♡" },                  // Row 1 Left (Pink blowing kiss)
+      wink:    { x: "50%",  y: "50%",  line: "Sehr gut gemacht, Pedro! What a good job! ✨" },        // Row 2 Center (Pink wink)
+      yellow:  { x: "0%",   y: "50%",  line: "100% COMPLETE! Ausgezeichnet, Pedro! I approve! ♡" }, // Row 1 Left (Yellow fists) -> wait, Yellow is Row 2 Col 1: x: 0%, y: 50%
+      huff:    { x: "50%",  y: "0%",   line: "Hmph. You undone a sip? I'm watching you, Pedro." },    // Row 1 Center (Burgundy huff)
+      sad:     { x: "100%", y: "0%",   line: "You're making me sad... please don't undo your water progress!" } // Row 1 Right (Blue crying)
     };
+
+    // Correcting yellow coordinate mapping to Row 2 Col 1 (0% x, 50% y) -> wait, Row 2 Col 1 is x:0%, y:50%. Let's adjust keys cleanly:
+    expressions.yellow = { x: "0%", y: "50%", line: "100% COMPLETE! Ausgezeichnet, Pedro! Look at that gorgeous yellow energy! ♡" };
 
     function loadState() {
       try {
@@ -641,9 +566,9 @@
 
       const hr = now.getHours();
       let msg = "Mooorning, Love!";
-      if (hr >= 12 && hr < 17) msg = "Good afternoon, Cheesecake!";
+      if (hr >= 12 && hr < 17) msg = "Sunny afternoon, Pedro!";
       else if (hr >= 17 && hr < 22) msg = "Evening, Pedro! Winding down?";
-      else if (hr >= 22 || hr < 5) msg = "Still awake, Hun?";
+      else if (hr >= 22 || hr < 5) msg = "Still awake, Cheesecake?";
       document.getElementById("greeting-text").textContent = msg;
     }
 
@@ -682,6 +607,7 @@
         } else if (rawPct >= 100) {
           setExpression("yellow");
         } else {
+          // Cycle through annoyed, kiss, and wink as he drinks!
           const stageChoices = ["annoyed", "kiss", "wink"];
           const choiceIndex = Math.floor(consumedMl / 300) % stageChoices.length;
           setExpression(stageChoices[choiceIndex]);
@@ -710,6 +636,7 @@
     loadState();
     updateGreeting();
     
+    // Force expression check immediately on start
     if (state.consumedMl <= 0) {
       renderUI("storm");
     } else {
@@ -744,6 +671,7 @@
       if (state.consumedMl === 0) {
         renderUI("storm");
       } else {
+        // Alternate between huff and sad on undo
         const undoChoice = (state.historyStack.length % 2 === 0) ? "huff" : "sad";
         renderUI(undoChoice);
       }
@@ -758,7 +686,7 @@
         saveState();
         renderUI();
         const fb = document.getElementById("settings-feedback");
-        fb.textContent = "Saved! ✨";
+        fb.textContent = "Saved!";
         setTimeout(() => (fb.textContent = ""), 2000);
       }
     });
