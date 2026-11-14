@@ -296,6 +296,34 @@ document.querySelectorAll(".nav-tab").forEach(function (tab) {
    PIXEL ART (drawn in code, no image files needed)
    ===================================================== */
 const PIXEL = {
+  hat: {
+    rows: [
+      "....XXXXXXXX....",
+      "..XXBWBWBWBWXX..",
+      ".XBWBWBWBWBWBWX.",
+      "XBWBWBWBWBWBWBWX",
+      "XBWBWBWBWBWBWBWX",
+      "XNNNNNNGGNNNNNNX",
+      "XNNNNNNNNNNNNNNX",
+      "XXXXXXXXXXXXXXXX",
+      ".XPPPPPPPPPPPPX.",
+      "..XXXXXXXXXXXX.."
+    ],
+    pal: { X: "#1B2F4A", B: "#3A6EA5", W: "#EAF2FB", N: "#24456E", G: "#FFD34D", P: "#2C4F7C" }
+  },
+  bheart: {
+    rows: [
+      ".XXX.XXX.",
+      "XLLBXBBBX",
+      "XLBBBBBBX",
+      "XBBBBBBBX",
+      ".XBBBBBX.",
+      "..XBBBX..",
+      "...XBX...",
+      "....X...."
+    ],
+    pal: { X: "#2F6FA3", B: "#A9D6F5", L: "#E6F4FD" }
+  },
   lips: {
     rows: [
       "..XXXX...XXXX..",
@@ -347,12 +375,12 @@ function pixelSVG(art) {
    EDIT ME: Kelly's words
    ===================================================== */
 const DAILY_NOTES = [
-  "Good morning, Cheesecake. You deserve a soft day and a big glass of water. 🩵",
+  "Good morning, Cheesecake. You deserve a soft day and a big glass of water. 💙",
   "Sit up straight, hydrate, and be adored. That's your whole job today, Cheesecake.",
   "Mini Kelly would bring you water in bed if she could. For now, this note will have to do. ♡",
   "You're doing so well, Luv. Treat yourself to a sip. Then another.",
   "Hydrated Pedro is happy Pedro. Drink up, Cheesecake!",
-  "You work so hard. Today, let yourself be taken care of. Start with water. 🩵",
+  "You work so hard. Today, let yourself be taken care of. Start with water. 💙",
   "I'm proud of you. Not for the water, just for being you.",
   "Whatever today throws at you, you can handle it. I believe in you.",
   "Reminder: you are loved, you are capable, and you are thirsty.",
@@ -364,12 +392,12 @@ const DAILY_NOTES = [
   "Every glass is a little act of self-love. Keep going.",
   "You don't have to be perfect, just keep showing up. I'm right here.",
   "Take a breath, roll your shoulders, drink some water. Better already, right?",
-  "Pampering schedule for today: 1) something,something 2) cuddles, 3) more water. You're welcome.",
+  "Pampering schedule for today: 1) water, 2) something,something 3) more water. You're welcome.",
   "Sehr gut, Pedro! You're doing everything right. Ausgezeichnet!",
   "I think you're wonderful. Just wanted you to know before your next sip.",
   "A hydrated Cheesecake is a glowing Cheesecake. ✨",
   "You're allowed to rest today. Water first, though. I'm watching. 👀",
-  "Hard day? Come here. Have some water. Everything's going to be okay. 💙",
+  "Hard day? Come here. Have some water. Everything's going to be okay. 🩵",
   "Your mood, your focus, even your cuteness: all improved by water. Science.",
   "No one drinks water quite as adorably as you do, Pedro.",
   "You're my favorite person to take care of, Love.",
@@ -395,16 +423,16 @@ const KISS_LINES = [
 const FLUSTERED_LINES = [
   "Okay okay!! You're making me blush...",
   "So many kisses?! Someone's needy today. ♡",
-  "Pedro!! I'm going to run out of kisses. (Never.)"
+  "Pedro!! "
 ];
 
 const MILESTONES = {
   3: "3 days in a row! Okay, Pedro, I see you. Keep it going. ♡",
   7: "A WHOLE WEEK! Ausgezeichnet! I'm so proud of you, Luv.",
-  14: "Two weeks!! Is there anything you can't do? 💙",
+  14: "Two weeks!! Is there anything you can't do? 🩵",
   30: "30 days. A full month of taking care of yourself. I'm so proud of you.",
   60: "60 days!! Two months of you being amazing.",
-  100: "100 DAYS. Pedro, you legend. I love you. 💙"
+  100: "100 DAYS. Pedro, you legend. I love you. 🩵"
 };
 
 /* =====================================================
@@ -545,7 +573,7 @@ document.getElementById("milestone-overlay").addEventListener("click", function 
 /* =====================================================
    Themes + settings
    ===================================================== */
-const THEME_COLORS = { ocean: "#E6F2FD", midnight: "#0E1A2A", mint: "#E4F6EE", lavender: "#EEE9FB" };
+const THEME_COLORS = { ocean: "#E6F2FD", midnight: "#0E1A2A", mint: "#E4F6EE", honey: "#F7F1D8", lavender: "#EEE9FB" };
 
 function applyTheme() {
   const t = THEME_COLORS[state.theme] ? state.theme : "ocean";
@@ -573,6 +601,7 @@ document.getElementById("setting-effects").addEventListener("change", function (
 /* =====================================================
    Start up
    ===================================================== */
+document.getElementById("brand-icons").innerHTML = pixelSVG(PIXEL.hat) + pixelSVG(PIXEL.bheart);
 document.getElementById("streak-flame").innerHTML = pixelSVG(PIXEL.flame);
 document.getElementById("kiss-lips").innerHTML = pixelSVG(PIXEL.lips);
 document.getElementById("milestone-flame").innerHTML = pixelSVG(PIXEL.flame);
