@@ -51,8 +51,9 @@
         </div>
         <button type="button" class="kiss-btn" id="kiss-btn">
           <span id="kiss-lips"></span>
-          <span>Tap for a kiss</span>
+          <span id="kiss-label">Tap for a kiss</span>
         </button>
+        <p class="kiss-hint" id="kiss-hint"></p>
         <p class="kiss-count" id="kiss-count"></p>
       </section>
 
@@ -149,7 +150,7 @@
           <button type="button" class="theme-btn" data-theme="mint"><span class="swatch" style="background:linear-gradient(135deg,#5DBF9B 50%,#E4F6EE 50%)"></span>Mint</button>
           <button type="button" class="theme-btn" data-theme="lavender"><span class="swatch" style="background:linear-gradient(135deg,#A18CDB 50%,#EEE9FB 50%)"></span>Lavender</button>
         </div>
-        <label class="toggle-row"><input type="checkbox" id="setting-effects" /> Hearts &amp; confetti</label>
+        <label class="toggle-row"><input type="checkbox" id="setting-effects" /> Hearts, confetti &amp; big kisses</label>
       </section>
     </main>
 
@@ -170,6 +171,8 @@
       <button type="button" class="primary-btn" id="milestone-close">Yay! 💙</button>
     </div>
   </div>
+
+  <div class="smooch" id="smooch" hidden></div>
 
   <script src="script.js"></script>
 </body>
