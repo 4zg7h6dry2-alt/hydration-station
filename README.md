@@ -1,2 +1,2 @@
 # hydration-station
-  A personalised hydration companion
+  A personalised hydration companion for my boyfriend 
