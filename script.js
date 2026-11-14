@@ -6,7 +6,11 @@ let state = {
   targetMl: 2000,
   glassSizeMl: 250,
   historyStack: [],
-  days: {}
+  days: {},
+  theme: "ocean",
+  effects: true,
+  kisses: 0,
+  milestonesSeen: []
 };
 
 const expressions = {
@@ -109,7 +113,7 @@ function renderStreak() {
 
   let msg;
   if (todayMet) {
-    msg = "Today's goal is done. Streak secured! 🔥";
+    msg = "Today's goal is done. Streak secured!";
   } else if (streak > 0) {
     msg = new Date().getHours() >= 18
       ? `Your ${streak}-day streak ends tonight! ${remaining.toLocaleString()} mL to go.`
@@ -144,10 +148,10 @@ function updateGreeting() {
   document.getElementById("greeting-text").textContent = msg;
 }
 
-function setExpression(key) {
+function setExpression(key, customLine) {
   const expr = expressions[key] || expressions.storm;
   document.getElementById("kelly-sprite-face").style.backgroundPosition = `${expr.x} ${expr.y}`;
-  document.getElementById("kelly-speech").textContent = `“${expr.line}”`;
+  document.getElementById("kelly-speech").textContent = `“${customLine || expr.line}”`;
 }
 
 function renderUI(forcedKey) {
@@ -192,9 +196,14 @@ function renderUI(forcedKey) {
 
 function logWater(ml) {
   if (!ml || ml <= 0) return;
+  const before = state.consumedMl;
   state.consumedMl += ml;
   state.historyStack.push(ml);
   saveState();
+  if (before < state.targetMl && state.consumedMl >= state.targetMl) {
+    burstConfetti();
+    checkMilestone();
+  }
 
   if (state.consumedMl >= state.targetMl) {
     renderUI("yellow");
@@ -217,6 +226,7 @@ if (state.consumedMl <= 0) {
 function checkNewDay() {
   if (rolloverIfNeeded()) {
     updateGreeting();
+    renderNote();
     renderUI("storm");
   }
 }
@@ -280,3 +290,255 @@ document.querySelectorAll(".nav-tab").forEach(function (tab) {
     document.getElementById(this.getAttribute("data-target")).classList.add("active");
   });
 });
+
+/* =====================================================
+   PIXEL ART (drawn in code, no image files needed)
+   ===================================================== */
+const PIXEL = {
+  lips: {
+    rows: [
+      "..XXXX...XXXX..",
+      ".XRHHRXXXRRRRX.",
+      "XRRRRRRRRRRRRRX",
+      "XDDDDDDDDDDDDDX",
+      "XRRRRHHRRRRRRRX",
+      ".XRRRRRRRRRRRX.",
+      "..XXRRRRRRRXX..",
+      "....XXXXXXX...."
+    ],
+    pal: { X: "#8C1D40", R: "#E5486F", H: "#FF9DB5", D: "#6B1230" }
+  },
+  flame: {
+    rows: [
+      "....O.....",
+      "...OO.....",
+      "...OOO..O.",
+      "..OOOO.OO.",
+      ".OOOOOOOOO",
+      ".OOOYOOOOO",
+      "OOOYYYOOOO",
+      "OOYYYYYOOO",
+      "OOYYLYYOOO",
+      "OOYLLLYOOO",
+      ".OYLLLYOO.",
+      "..OOOOOO.."
+    ],
+    pal: { O: "#E8481C", Y: "#FFA11F", L: "#FFE066" }
+  },
+  heart: {
+    rows: [".HH.HH.", "HWHHHHH", "HHHHHHH", ".HHHHH.", "..HHH..", "...H..."],
+    pal: { H: "#F26D8F", W: "#FFC2D1" }
+  }
+};
+
+function pixelSVG(art) {
+  const h = art.rows.length, w = art.rows[0].length;
+  let rects = "";
+  art.rows.forEach(function (row, y) {
+    [...row].forEach(function (c, x) {
+      if (art.pal[c]) rects += `<rect x="${x}" y="${y}" width="1" height="1" fill="${art.pal[c]}"/>`;
+    });
+  });
+  return `<svg class="pixel" viewBox="0 0 ${w} ${h}" shape-rendering="crispEdges" aria-hidden="true">${rects}</svg>`;
+}
+
+/* =====================================================
+   EDIT ME: Kelly's words
+   ===================================================== */
+const DAILY_NOTES = [
+  "Good morning, Cheesecake. You deserve a soft day and a big glass of water. 💙",
+  "Sit up straight, hydrate, and be adored. That's your whole job today, Cheesecake.",
+  "Mini Kelly would bring you water in bed if she could. For now, this note will have to do. ♡",
+  "You're doing so well, Luv. Treat yourself to a sip. Then another.",
+  "Hydrated Pedro is happy Pedro. Drink up, Cheesecake!",
+  "You work so hard. Today, let yourself be taken care of. Start with water. 💙",
+  "I'm proud of you. Not for the water, just for being you.",
+  "Whatever today throws at you, you can handle it. I believe in you.",
+  "Reminder: you are loved, you are capable, and you are thirsty.",
+  "You deserve all the comfy things today: a soft blanket, snacks, and a very full water glass.",
+  "Small sips, big love. You're doing great, Luv.",
+  "Cheesecake, you are the best part of my day. Now go drink some water. ♡",
+  "Be kind to yourself today. You deserve the same care you give everyone else.",
+  "Mini Kelly is smiling because of you today.",
+  "Every glass is a little act of self-love. Keep going.",
+  "You don't have to be perfect, just keep showing up. I'm right here.",
+  "Take a breath, roll your shoulders, drink some water. Better already, right?",
+  "Pampering schedule for today: 1) water, 2) something,something, 3) more water. You're welcome.",
+  "Sehr gut, Pedro! You're doing everything right. Ausgezeichnet!",
+  "I think you're wonderful. Just wanted you to know before your next sip.",
+  "A hydrated Cheesecake is a glowing Cheesecake. ✨",
+  "You're allowed to rest today. Water first, though. I'm watching. 👀",
+  "Hard day? Come here. Have some water. Everything's going to be okay. 💙",
+  "Your mood, your focus, even your cuteness: all improved by water. Science.",
+  "No one drinks water quite as adorably as you do, Pedro.",
+  "You're my favorite person to take care of, Love.",
+  "Little reminder that someone is thinking about you right now. It's me. ♡",
+  "You've got this, Cheesecake. And if you don't, I've got you.",
+  "Today's forecast: 100% chance of being loved, with scattered sips.",
+  "You're my whole heart, Pedro. Hydrate it. 💙"
+];
+
+const KISS_LINES = [
+  "Mwah! Right on the cheek. ♡",
+  "Kiss delivered! Now drink some water, Cheesecake.",
+  "Aww, you want another? Okay... mwah!",
+  "One kiss, extra hydration. That's the deal.",
+  "Smooch! Sehr gut, Pedro.",
+  "Kisses are good for your heart. Water too. 💙",
+  "Come here, you. Mwah! ♡",
+  "Pampered and kissed. You're doing great, Luv.",
+  "A kiss for my favorite Cheesecake.",
+  "Mwah mwah! Now sip."
+];
+
+const FLUSTERED_LINES = [
+  "Okay okay!! You're making me blush...",
+  "So many kisses?! Someone's needy today. ♡",
+  "Pedro!! I'm going to run out of kisses. (Never.)"
+];
+
+const MILESTONES = {
+  3: "3 days in a row! Okay, Pedro, I see you. Keep it going. ♡",
+  7: "A WHOLE WEEK! Ausgezeichnet! I'm so proud of you, Luv.",
+  14: "Two weeks!! Is there anything you can't do? 💙",
+  30: "30 days. A full month of taking care of yourself. I'm so proud of you.",
+  60: "60 days!! Two months of you being amazing.",
+  100: "100 DAYS. Pedro, you legend. I love you. 💙"
+};
+
+/* =====================================================
+   Daily note
+   ===================================================== */
+function renderNote() {
+  const d = new Date();
+  const dayNum = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
+  document.getElementById("daily-note").textContent = DAILY_NOTES[dayNum % DAILY_NOTES.length];
+}
+
+/* =====================================================
+   Effects: hearts + confetti
+   ===================================================== */
+function floatHearts() {
+  if (state.effects === false) return;
+  const box = document.querySelector(".mascot-box");
+  for (let i = 0; i < 6; i++) {
+    const h = document.createElement("span");
+    h.className = "float-heart";
+    h.innerHTML = pixelSVG(PIXEL.heart);
+    h.style.left = 25 + Math.random() * 50 + "%";
+    h.style.animationDelay = Math.random() * 0.3 + "s";
+    box.appendChild(h);
+    setTimeout(function () { h.remove(); }, 1800);
+  }
+}
+
+function burstConfetti() {
+  if (state.effects === false) return;
+  const colors = ["#73AEDB", "#F4A8B8", "#FFE066", "#9ED8C0", "#A18CDB", "#F26D8F"];
+  for (let i = 0; i < 36; i++) {
+    const p = document.createElement("div");
+    const size = 6 + Math.floor(Math.random() * 3) * 2;
+    p.className = "confetti-piece";
+    p.style.width = p.style.height = size + "px";
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.background = colors[i % colors.length];
+    p.style.animationDuration = 2 + Math.random() * 1.5 + "s";
+    p.style.animationDelay = Math.random() * 0.4 + "s";
+    document.body.appendChild(p);
+    setTimeout(function () { p.remove(); }, 4200);
+  }
+}
+
+/* =====================================================
+   Kiss button
+   ===================================================== */
+let kissTimes = [];
+let lastKiss = -1;
+
+function updateKissCount() {
+  document.getElementById("kiss-count").textContent =
+    state.kisses ? `${state.kisses} kiss${state.kisses === 1 ? "" : "es"} delivered` : "";
+}
+
+document.getElementById("kiss-btn").addEventListener("click", function () {
+  const now = Date.now();
+  kissTimes = kissTimes.filter(function (t) { return now - t < 8000; });
+  kissTimes.push(now);
+  state.kisses = (state.kisses || 0) + 1;
+  saveState();
+  updateKissCount();
+
+  if (kissTimes.length > 6) {
+    setExpression("wink", FLUSTERED_LINES[Math.floor(Math.random() * FLUSTERED_LINES.length)]);
+  } else {
+    let i;
+    do { i = Math.floor(Math.random() * KISS_LINES.length); } while (i === lastKiss && KISS_LINES.length > 1);
+    lastKiss = i;
+    setExpression("kiss", KISS_LINES[i]);
+  }
+  floatHearts();
+  this.classList.remove("pop");
+  void this.offsetWidth;
+  this.classList.add("pop");
+});
+
+/* =====================================================
+   Streak milestones
+   ===================================================== */
+function checkMilestone() {
+  const n = computeStreak();
+  if (!MILESTONES[n]) return;
+  const key = `${n}:${dateKey(new Date())}`;
+  if (state.milestonesSeen.includes(key)) return;
+  state.milestonesSeen.push(key);
+  saveState();
+  document.getElementById("milestone-title").textContent = `${n}-DAY STREAK!`;
+  document.getElementById("milestone-text").textContent = MILESTONES[n];
+  document.getElementById("milestone-overlay").hidden = false;
+}
+
+function closeMilestone() {
+  document.getElementById("milestone-overlay").hidden = true;
+}
+document.getElementById("milestone-close").addEventListener("click", closeMilestone);
+document.getElementById("milestone-overlay").addEventListener("click", function (e) {
+  if (e.target === this) closeMilestone();
+});
+
+/* =====================================================
+   Themes + settings
+   ===================================================== */
+const THEME_COLORS = { ocean: "#E6F2FD", midnight: "#0E1A2A", mint: "#E4F6EE", lavender: "#EEE9FB" };
+
+function applyTheme() {
+  const t = THEME_COLORS[state.theme] ? state.theme : "ocean";
+  document.documentElement.setAttribute("data-theme", t);
+  document.querySelector('meta[name="theme-color"]').setAttribute("content", THEME_COLORS[t]);
+  document.querySelectorAll(".theme-btn").forEach(function (b) {
+    b.classList.toggle("active", b.getAttribute("data-theme") === t);
+  });
+  document.getElementById("setting-effects").checked = state.effects !== false;
+}
+
+document.querySelectorAll(".theme-btn").forEach(function (b) {
+  b.addEventListener("click", function () {
+    state.theme = this.getAttribute("data-theme");
+    saveState();
+    applyTheme();
+  });
+});
+
+document.getElementById("setting-effects").addEventListener("change", function () {
+  state.effects = this.checked;
+  saveState();
+});
+
+/* =====================================================
+   Start up
+   ===================================================== */
+document.getElementById("streak-flame").innerHTML = pixelSVG(PIXEL.flame);
+document.getElementById("kiss-lips").innerHTML = pixelSVG(PIXEL.lips);
+document.getElementById("milestone-flame").innerHTML = pixelSVG(PIXEL.flame);
+applyTheme();
+renderNote();
+updateKissCount();
