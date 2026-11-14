@@ -192,6 +192,7 @@ function renderUI(forcedKey) {
   document.getElementById("setting-target").value = targetMl;
   document.getElementById("setting-glass").value = glassSizeMl;
   renderStreak();
+  updateKissState();
 }
 
 function logWater(ml) {
@@ -346,12 +347,12 @@ function pixelSVG(art) {
    EDIT ME: Kelly's words
    ===================================================== */
 const DAILY_NOTES = [
-  "Good morning, Cheesecake. You deserve a soft day and a big glass of water. 💙",
+  "Good morning, Cheesecake. You deserve a soft day and a big glass of water. 🩵",
   "Sit up straight, hydrate, and be adored. That's your whole job today, Cheesecake.",
   "Mini Kelly would bring you water in bed if she could. For now, this note will have to do. ♡",
   "You're doing so well, Luv. Treat yourself to a sip. Then another.",
   "Hydrated Pedro is happy Pedro. Drink up, Cheesecake!",
-  "You work so hard. Today, let yourself be taken care of. Start with water. 💙",
+  "You work so hard. Today, let yourself be taken care of. Start with water. 🩵",
   "I'm proud of you. Not for the water, just for being you.",
   "Whatever today throws at you, you can handle it. I believe in you.",
   "Reminder: you are loved, you are capable, and you are thirsty.",
@@ -363,7 +364,7 @@ const DAILY_NOTES = [
   "Every glass is a little act of self-love. Keep going.",
   "You don't have to be perfect, just keep showing up. I'm right here.",
   "Take a breath, roll your shoulders, drink some water. Better already, right?",
-  "Pampering schedule for today: 1) water, 2) something,something, 3) more water. You're welcome.",
+  "Pampering schedule for today: 1) something,something 2) cuddles, 3) more water. You're welcome.",
   "Sehr gut, Pedro! You're doing everything right. Ausgezeichnet!",
   "I think you're wonderful. Just wanted you to know before your next sip.",
   "A hydrated Cheesecake is a glowing Cheesecake. ✨",
@@ -375,7 +376,7 @@ const DAILY_NOTES = [
   "Little reminder that someone is thinking about you right now. It's me. ♡",
   "You've got this, Cheesecake. And if you don't, I've got you.",
   "Today's forecast: 100% chance of being loved, with scattered sips.",
-  "You're my whole heart, Pedro. Hydrate it. 💙"
+  "You're my whole heart, Pedro. Hydrate it. 🩵"
 ];
 
 const KISS_LINES = [
@@ -384,7 +385,7 @@ const KISS_LINES = [
   "Aww, you want another? Okay... mwah!",
   "One kiss, extra hydration. That's the deal.",
   "Smooch! Sehr gut, Pedro.",
-  "Kisses are good for your heart. Water too. 💙",
+  "Kisses are good for your heart. Water too. 🩵",
   "Come here, you. Mwah! ♡",
   "Pampered and kissed. You're doing great, Luv.",
   "A kiss for my favorite Cheesecake.",
@@ -460,7 +461,42 @@ function updateKissCount() {
     state.kisses ? `${state.kisses} kiss${state.kisses === 1 ? "" : "es"} delivered` : "";
 }
 
+let hintTimer;
+let smoochTimer;
+
+function updateKissState() {
+  const ready = state.consumedMl >= state.targetMl;
+  const btn = document.getElementById("kiss-btn");
+  btn.classList.toggle("ready", ready);
+  btn.classList.toggle("locked", !ready);
+  document.getElementById("kiss-label").textContent = ready ? "Claim your kiss!" : "Tap for a kiss";
+  if (ready) document.getElementById("kiss-hint").textContent = "";
+}
+
+function bigSmooch() {
+  if (state.effects === false) return;
+  const el = document.getElementById("smooch");
+  el.innerHTML = pixelSVG(PIXEL.lips);
+  el.hidden = false;
+  el.classList.remove("go");
+  void el.offsetWidth;
+  el.classList.add("go");
+  clearTimeout(smoochTimer);
+  smoochTimer = setTimeout(function () { el.hidden = true; }, 1700);
+}
+
 document.getElementById("kiss-btn").addEventListener("click", function () {
+  if (state.consumedMl < state.targetMl) {
+    const hint = document.getElementById("kiss-hint");
+    hint.textContent = "Nice try. You still have some water to drink ;)";
+    setExpression("wink", "Hehe... not yet, Cheesecake. ;)");
+    this.classList.remove("shake");
+    void this.offsetWidth;
+    this.classList.add("shake");
+    clearTimeout(hintTimer);
+    hintTimer = setTimeout(function () { hint.textContent = ""; }, 5000);
+    return;
+  }
   const now = Date.now();
   kissTimes = kissTimes.filter(function (t) { return now - t < 8000; });
   kissTimes.push(now);
@@ -477,6 +513,7 @@ document.getElementById("kiss-btn").addEventListener("click", function () {
     setExpression("kiss", KISS_LINES[i]);
   }
   floatHearts();
+  bigSmooch();
   this.classList.remove("pop");
   void this.offsetWidth;
   this.classList.add("pop");
