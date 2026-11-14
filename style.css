@@ -511,7 +511,7 @@ body {
 /* ---------- pixel art ---------- */
 .pixel { display: block; image-rendering: pixelated; }
 .streak-flame svg { width: 30px; height: 36px; }
-.kiss-btn svg { width: 45px; height: 24px; }
+.kiss-btn svg { width: 39px; height: 21px; }
 .float-heart svg { width: 18px; height: 15px; }
 .milestone-flame svg { width: 60px; height: 72px; margin: 0 auto 10px; }
 
@@ -660,26 +660,44 @@ body {
   position: fixed;
   inset: 0;
   z-index: 70;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
   pointer-events: none;
-  background: rgba(244, 168, 184, 0.45);
 }
 .smooch[hidden] { display: none; }
-.smooch svg { height: 100vh; width: 187.5vh; flex: none; }
-.smooch.go { animation: smoochFade 1.6s ease both; }
-.smooch.go svg { animation: smoochPop 1.6s ease both; }
+.kiss-stamp {
+  position: absolute;
+  animation: stampPop 1.8s ease both;
+}
+.kiss-stamp svg { width: 100%; height: auto; }
 
-@keyframes smoochFade {
-  0% { opacity: 0; }
-  15% { opacity: 1; }
-  75% { opacity: 1; }
-  100% { opacity: 0; }
+@keyframes stampPop {
+  0% { opacity: 0; transform: rotate(var(--rot)) scale(0); }
+  15% { opacity: 1; transform: rotate(var(--rot)) scale(1.25); }
+  25% { opacity: 1; transform: rotate(var(--rot)) scale(1); }
+  80% { opacity: 1; transform: rotate(var(--rot)) scale(1); }
+  100% { opacity: 0; transform: rotate(var(--rot)) scale(1.05); }
 }
-@keyframes smoochPop {
-  0% { transform: scale(0.1); }
-  20% { transform: scale(1); }
-  100% { transform: scale(1.12); }
+
+/* ---------- Kelly's lips image ---------- */
+.lips-img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+#kiss-lips { display: block; width: 56px; }
+.kiss-btn.pop img { animation: pop 0.3s ease; }
+
+/* ---------- Kelly's Diary ---------- */
+.diary-list { display: flex; flex-direction: column; gap: 10px; }
+.diary-entry {
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--primary-blue);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
+.diary-entry.met { border-left-color: var(--accent-pink); }
+.diary-head { display: flex; justify-content: space-between; align-items: center; }
+.diary-date { font-family: 'Fraunces', serif; font-weight: 600; color: var(--dark-blue); font-size: 1rem; }
+.diary-kisses { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 700; color: var(--dark-blue); }
+.diary-lips { display: block; width: 26px; }
+.diary-water { font-size: 0.82rem; color: var(--text-muted); font-weight: 600; }
+.diary-note { font-size: 0.85rem; font-style: italic; color: var(--text-main); }
