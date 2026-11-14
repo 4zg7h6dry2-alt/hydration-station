@@ -13,6 +13,7 @@
   --track: #E1EEFA;
   --hover: #EAF3FB;
   --btn-dark: #245A8C;
+  --on-primary: #FFFFFF;
   --shadow: rgba(115, 174, 219, 0.25);
 }
 
@@ -30,6 +31,14 @@
   --accent-pink: #F4A8B8; --border-color: #9ED8C0; --surface: #FFFFFF;
   --tint-1: #EFFAF5; --tint-2: #F6FCF9; --track: #D7F0E5; --hover: #E5F6EE;
   --btn-dark: #1F6B52; --shadow: rgba(93, 191, 155, 0.25);
+}
+
+[data-theme="honey"] {
+  --bg-color: #F7F1D8; --card-bg: #FFFEF8; --primary-blue: #D9BB55;
+  --dark-blue: #7A6420; --text-main: #3A2F10; --text-muted: #8C7C4C;
+  --accent-pink: #F4A8B8; --border-color: #E2D28F; --surface: #FFFEF8;
+  --tint-1: #FBF6DF; --tint-2: #FDFAEC; --track: #F1E7BA; --hover: #F6EDC8;
+  --btn-dark: #7A6420; --on-primary: #3A2F10; --shadow: rgba(217, 187, 85, 0.3);
 }
 
 [data-theme="lavender"] {
@@ -71,7 +80,7 @@ body {
 
 .top-bar {
   background-color: var(--primary-blue);
-  color: #FFFFFF;
+  color: var(--on-primary);
   padding: 14px 18px;
   display: flex;
   justify-content: space-between;
@@ -82,8 +91,15 @@ body {
 .brand-title {
   font-family: 'Fraunces', serif;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
+
+.brand-icons { display: flex; align-items: center; gap: 4px; }
+.brand-icons svg:first-child { width: 32px; height: 20px; }
+.brand-icons svg:last-child { width: 18px; height: 16px; }
 
 .date-tag {
   font-size: 0.85rem;
@@ -255,7 +271,7 @@ body {
 
 .primary-btn {
   background-color: var(--primary-blue);
-  color: #FFFFFF;
+  color: var(--on-primary);
   border: 2px solid var(--dark-blue);
   padding: 14px;
   font-family: 'Fraunces', serif;
@@ -478,7 +494,7 @@ body {
 .streak-dot.met {
   background: var(--primary-blue);
   border-color: var(--dark-blue);
-  color: #FFFFFF;
+  color: var(--on-primary);
 }
 
 .streak-dot.today {
