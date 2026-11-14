@@ -10,6 +10,7 @@ let state = {
   theme: "ocean",
   effects: true,
   kisses: 0,
+  kissesToday: 0,
   milestonesSeen: []
 };
 
@@ -43,11 +44,12 @@ function rolloverIfNeeded() {
   if (state.date === today) return false;
   const prev = new Date(state.date);
   if (!isNaN(prev)) {
-    state.days[dateKey(prev)] = { ml: state.consumedMl, target: state.targetMl };
+    state.days[dateKey(prev)] = { ml: state.consumedMl, target: state.targetMl, kisses: state.kissesToday || 0 };
   }
   state.date = today;
   state.consumedMl = 0;
   state.historyStack = [];
+  state.kissesToday = 0;
   saveState();
   return true;
 }
@@ -65,7 +67,7 @@ function loadState() {
 }
 
 function saveState() {
-  state.days[dateKey(new Date())] = { ml: state.consumedMl, target: state.targetMl };
+  state.days[dateKey(new Date())] = { ml: state.consumedMl, target: state.targetMl, kisses: state.kissesToday || 0 };
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (e) {}
@@ -193,6 +195,7 @@ function renderUI(forcedKey) {
   document.getElementById("setting-glass").value = glassSizeMl;
   renderStreak();
   updateKissState();
+  if (appReady) renderDiary();
 }
 
 function logWater(ml) {
@@ -228,6 +231,7 @@ function checkNewDay() {
   if (rolloverIfNeeded()) {
     updateGreeting();
     renderNote();
+    updateKissCount();
     renderUI("storm");
   }
 }
@@ -326,16 +330,15 @@ const PIXEL = {
   },
   lips: {
     rows: [
-      "..XXXX...XXXX..",
-      ".XRHHRXXXRRRRX.",
-      "XRRRRRRRRRRRRRX",
-      "XDDDDDDDDDDDDDX",
-      "XRRRRHHRRRRRRRX",
-      ".XRRRRRRRRRRRX.",
-      "..XXRRRRRRRXX..",
-      "....XXXXXXX...."
+      ".OOOO...OOOO.",
+      "OPPWPPOPPWPPO",
+      "XXDDDDDDDDDXX",
+      ".ORRPPPPPRRO.",
+      ".ORPPPPWPPRO.",
+      "..ORRPPPRRO..",
+      "...OOOOOOO..."
     ],
-    pal: { X: "#8C1D40", R: "#E5486F", H: "#FF9DB5", D: "#6B1230" }
+    pal: { O: "#C97088", P: "#EE5F8C", R: "#D93A6A", D: "#A81F4B", X: "#7A1535", H: "#F9A8C0", W: "#FFFFFF" }
   },
   flame: {
     rows: [
@@ -360,6 +363,9 @@ const PIXEL = {
   }
 };
 
+// Kelly's hand-made lips. If the image is missing, the pixel-code lips show instead.
+const LIPS_IMG = '<img class="lips-img" src="kiss-lips.png" alt="" draggable="false" onerror="this.outerHTML=pixelSVG(PIXEL.lips)">';
+
 function pixelSVG(art) {
   const h = art.rows.length, w = art.rows[0].length;
   let rects = "";
@@ -375,12 +381,12 @@ function pixelSVG(art) {
    EDIT ME: Kelly's words
    ===================================================== */
 const DAILY_NOTES = [
-  "Good morning, Cheesecake. You deserve a soft day and a big glass of water. 💙",
+  "Good morning, Cheesecake. You deserve a soft day and a big glass of water. 🩵",
   "Sit up straight, hydrate, and be adored. That's your whole job today, Cheesecake.",
   "Mini Kelly would bring you water in bed if she could. For now, this note will have to do. ♡",
   "You're doing so well, Luv. Treat yourself to a sip. Then another.",
   "Hydrated Pedro is happy Pedro. Drink up, Cheesecake!",
-  "You work so hard. Today, let yourself be taken care of. Start with water. 💙",
+  "You work so hard. Today, let yourself be taken care of. Start with water. 🩵",
   "I'm proud of you. Not for the water, just for being you.",
   "Whatever today throws at you, you can handle it. I believe in you.",
   "Reminder: you are loved, you are capable, and you are thirsty.",
@@ -392,11 +398,11 @@ const DAILY_NOTES = [
   "Every glass is a little act of self-love. Keep going.",
   "You don't have to be perfect, just keep showing up. I'm right here.",
   "Take a breath, roll your shoulders, drink some water. Better already, right?",
-  "Pampering schedule for today: 1) water, 2) something,something 3) more water. You're welcome.",
+  "Pampering schedule for today: 1) water, 2) cuddles, 3) more water. You're welcome.",
   "Sehr gut, Pedro! You're doing everything right. Ausgezeichnet!",
   "I think you're wonderful. Just wanted you to know before your next sip.",
   "A hydrated Cheesecake is a glowing Cheesecake. ✨",
-  "You're allowed to rest today. Water first, though. I'm watching. 👀",
+  "You're allowed to rest today. Water first, though. I'm watching. ",
   "Hard day? Come here. Have some water. Everything's going to be okay. 🩵",
   "Your mood, your focus, even your cuteness: all improved by water. Science.",
   "No one drinks water quite as adorably as you do, Pedro.",
@@ -485,8 +491,9 @@ let kissTimes = [];
 let lastKiss = -1;
 
 function updateKissCount() {
+  const t = state.kissesToday || 0;
   document.getElementById("kiss-count").textContent =
-    state.kisses ? `${state.kisses} kiss${state.kisses === 1 ? "" : "es"} delivered` : "";
+    t ? `${t} kiss${t === 1 ? "" : "es"} delivered today` : "";
 }
 
 let hintTimer;
@@ -504,13 +511,21 @@ function updateKissState() {
 function bigSmooch() {
   if (state.effects === false) return;
   const el = document.getElementById("smooch");
-  el.innerHTML = pixelSVG(PIXEL.lips);
+  const cells = [];
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 3; c++) cells.push([c, r]);
+  cells.sort(function () { return Math.random() - 0.5; });
+  let html = "";
+  cells.slice(0, 8).forEach(function (cell, i) {
+    const size = 72 + Math.random() * 40;
+    const left = ((cell[0] + 0.1 + Math.random() * 0.5) / 3) * 100;
+    const top = ((cell[1] + 0.1 + Math.random() * 0.5) / 4) * 100;
+    const rot = Math.round(Math.random() * 40 - 20);
+    html += `<span class="kiss-stamp" style="left:${left}%;top:${top}%;width:${size}px;--rot:${rot}deg;animation-delay:${(i * 0.12).toFixed(2)}s">${LIPS_IMG}</span>`;
+  });
+  el.innerHTML = html;
   el.hidden = false;
-  el.classList.remove("go");
-  void el.offsetWidth;
-  el.classList.add("go");
   clearTimeout(smoochTimer);
-  smoochTimer = setTimeout(function () { el.hidden = true; }, 1700);
+  smoochTimer = setTimeout(function () { el.hidden = true; el.innerHTML = ""; }, 3000);
 }
 
 document.getElementById("kiss-btn").addEventListener("click", function () {
@@ -529,8 +544,10 @@ document.getElementById("kiss-btn").addEventListener("click", function () {
   kissTimes = kissTimes.filter(function (t) { return now - t < 8000; });
   kissTimes.push(now);
   state.kisses = (state.kisses || 0) + 1;
+  state.kissesToday = (state.kissesToday || 0) + 1;
   saveState();
   updateKissCount();
+  renderDiary();
 
   if (kissTimes.length > 6) {
     setExpression("wink", FLUSTERED_LINES[Math.floor(Math.random() * FLUSTERED_LINES.length)]);
@@ -603,8 +620,49 @@ document.getElementById("setting-effects").addEventListener("change", function (
    ===================================================== */
 document.getElementById("brand-icons").innerHTML = pixelSVG(PIXEL.hat) + pixelSVG(PIXEL.bheart);
 document.getElementById("streak-flame").innerHTML = pixelSVG(PIXEL.flame);
-document.getElementById("kiss-lips").innerHTML = pixelSVG(PIXEL.lips);
+document.getElementById("kiss-lips").innerHTML = LIPS_IMG;
 document.getElementById("milestone-flame").innerHTML = pixelSVG(PIXEL.flame);
 applyTheme();
 renderNote();
 updateKissCount();
+appReady = true;
+renderDiary();
+
+/* =====================================================
+   Kelly's Diary: one entry per day with water + kisses
+   ===================================================== */
+var appReady;
+
+function diaryNote(e, isToday) {
+  const met = e.target > 0 && e.ml >= e.target;
+  const k = e.kisses || 0;
+  const pct = e.target > 0 ? Math.round((e.ml / e.target) * 100) : 0;
+  if (met && k > 0) return `Goal done and ${k} kiss${k === 1 ? "" : "es"} earned. Ausgezeichnet, Pedro! ♡`;
+  if (met) return "Goal reached, but no kiss claimed? I'm a little offended. ;)";
+  if (isToday) return e.ml > 0 ? `${pct}% so far. Keep going, Cheesecake. I'm watching.` : "Nothing yet today. I'm waiting, Pedro...";
+  if (e.ml > 0) return `Only ${pct}% that day. I'm not mad, just watching. 👀`;
+  return "Not a single sip? Pedro... we need to talk.";
+}
+
+function diaryEntry(label, e, isToday) {
+  const met = e.target > 0 && e.ml >= e.target;
+  const k = e.kisses || 0;
+  const kissHTML = typeof e.kisses === "number"
+    ? `<span class="diary-kisses"><span class="diary-lips">${LIPS_IMG}</span>${k} kiss${k === 1 ? "" : "es"}</span>`
+    : "";
+  return `<div class="diary-entry${met ? " met" : ""}">
+    <div class="diary-head"><span class="diary-date">${label}</span>${kissHTML}</div>
+    <div class="diary-water">${e.ml.toLocaleString()} / ${e.target.toLocaleString()} mL${met ? " · Goal met" : ""}</div>
+    <p class="diary-note">“${diaryNote(e, isToday)}”</p>
+  </div>`;
+}
+
+function renderDiary() {
+  const todayKey = dateKey(new Date());
+  let html = diaryEntry("Today", { ml: state.consumedMl, target: state.targetMl, kisses: state.kissesToday || 0 }, true);
+  Object.keys(state.days).filter(function (k) { return k !== todayKey; }).sort().reverse().slice(0, 30).forEach(function (k) {
+    const label = new Date(k + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+    html += diaryEntry(label, state.days[k], false);
+  });
+  document.getElementById("diary-list").innerHTML = html;
+}
